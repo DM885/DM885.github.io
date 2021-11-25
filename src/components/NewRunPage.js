@@ -1,3 +1,4 @@
+import { nominalTypeHack } from "prop-types";
 import React,   {useState} from "react";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -34,9 +35,19 @@ const NewRunPage = () => {
             size: 13133,
         }
     ]);
+
+    const [solvers, setSolver] = useState([
+        {
+            name: "GeCode",
+            }, 
+        {   
+            name: "OR-Tool",
+           
+        }
+    ]);
   
 
-    const setSolver = (id, e) => {
+    const chooseSolver = (id, e) => {
         e.preventDefault();
         const newInputFields = inputFields.map(i => {
             if(id === i.id) {
@@ -77,49 +88,67 @@ const NewRunPage = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h4>Please choose the model the solvers should work with </h4>
-            <div class="dropdown">
-                <select class="form-select form-select-lg mb-2" aria-label=".form-select-lg example" style={{ width: '40%' }}>
-                    {models.map(model => (
-                        <option value={model.name}>{model.name}</option>
-                    ))}
-                </select>
-            </div>
-            <h4>Please choose the data the solvers should work with </h4>
-            <div class="dropdown">
-                <select class="form-select form-select-lg mb-2" aria-label=".form-select-lg example" style={{ width: '40%' }}>
-                    {data.map(data => (
-                        <option value={data.name}>{data.name}</option>
-                    ))}
-                </select>
-            </div>
-            <br></br>
-                {inputFields.map(inputField => (
-                    <div key={inputField.id}>
-                        <label>
-                            <h5>Choose solver:</h5>
-                            <select class="form-select form-select-lg mb-2" aria-label=".form-select-lg example" id="solver" value={inputFields.solver} onChange={e => setSolver(inputField.id, e)}>
-                                <option value="">Select solver</option>
-                                <option value="solver1">Solver 1</option>
-                                <option value="solver2">Solver 2</option>
-                                <option value="solver3">Solver 3</option>
+        //box around form
+        <div className="container" style={{width: '100%', backgroundColor:'lightgray', color:'black', width:'50%', marginTop:"15px"}}>
+            <div className="row" >
+                
+                    <form onSubmit={handleSubmit}>
+
+                    
+                        <><label>Please choose the model the solvers should work with </label>
+                        <div class="dropdown">
+                            <select class="col-25" style={{float:"left", width:"100%", marginTop:"6px"}}>
+                                {models.map(model => (
+                                    <option value={model.name}>{model.name}</option>
+                                ))}
                             </select>
-                        </label>
-                        <label>
-                            Set flags:
-                            <input id="flags" value={inputFields.flags} onChange={e => setFlags(inputField.id, e)} />
-                        </label>
-                        <label>
-                            <i class="bi bi-plus" onClick={addFields}></i>
-                            <i class="bi bi-x" onClick={() => removeFields(inputField.id)}></i>
-                        </label>
+                        </div><label>Please choose the data the solvers should work with </label>
+                        <div class="dropdown">
+                                <select class="col-25" style={{float:"left", width:"100%", marginTop:"6px"}}>
+                                    {data.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div><br></br></>
+                            {inputFields.map(inputField => (
+                                //make a gray box around each solver
+                                <div className="card" style={{width: '100%', backgroundColor:'gray', color:'white', width:"100%"}}>
+                                    <div className="card-body">
+                                        
 
-                    </div>
+                                        <div key={inputField.id}>
+                                            <container> 
+                                            <label>
+                                                Choose solver:
+                                            </label>
+                                            <container>
+                                                <select class="col-25" style={{float:"left", width:"50%", marginTop:"6px"}} id="solver" value={inputFields.solver} onChange={e => chooseSolver(inputField.id, e)}>
+                                                        {solvers.map(solver => (
+                                                            <option value={solver.name}>{solver.name}</option>
+                                                            ))}
+                                                </select>
+                                            </container>
+                                            </container>
+                                            <label>
+                                                Set flags:
+                                                <input type="text" id="flag" style= {{width:"100%", padding: "12px", border: "1px solid black", borderRadius:"4px", resize: "vertical"}}value={inputFields.flag} onChange={e => setFlags(inputField.id, e)}/>
+                                            </label>
+                                            <container>
+                                                <i class="bi bi-plus" onClick={addFields}></i>
+                                                <i class="bi bi-x" onClick={() => removeFields(inputField.id)}></i>
+                                             </container>
 
-                ), this)}
-                <input type="submit" value="Submit" />
-            </form>
+                                        </div>
+                                        </div>
+                                </div>
+
+                            ), this)}
+                            <button type="submit" class="btn btn-primary" style={{marginTop:'15px', float:"right", borderRadius: "4px", border: "none", padding:"12px 20px"}}>Submit</button>
+                        </form>
+                    </div >
+                
+            </div >
+            
     );
 }
 

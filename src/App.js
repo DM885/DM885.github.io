@@ -9,7 +9,7 @@ import {API} from "./helpers";
 
 export default class App extends React.Component {
   state = {
-    authToken: false,
+    authToken: true,
   };
 
   /**
